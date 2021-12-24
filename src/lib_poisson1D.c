@@ -9,6 +9,18 @@
 void set_GB_operator_rowMajor_poisson1D(double* AB, int *lab, int *la){
 
   //TODO
+  int ii, jj, kk;
+
+  for(jj=1; jj<(*la);jj++){
+    AB[(*la)+jj] = -1.0;
+    AB[2*(*la)+jj]= 2.0;
+    AB[3*(*la)+jj] = -1.0;
+    AB[jj] = 0.0;
+  }
+    AB[2*(*la)] = 2.0;
+    AB[(*la)] = 0.0;
+  AB[3*(*la)] = -1.0;
+  AB[4*(*la)-1] = 0.0;
 }
 //Ecriture de la matrice de Poisson 1D en stockage general band en priorité colonne
 void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){

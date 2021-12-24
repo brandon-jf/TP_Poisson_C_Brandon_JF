@@ -47,7 +47,6 @@ int main(int argc,char *argv[])
   AB = (double *) malloc(sizeof(double)*lab*la);
 
   info=0;
-  info=0;
 
   /* working array for pivot used by LU Factorization */
   ipiv = (int *) calloc(la, sizeof(int));
@@ -56,16 +55,17 @@ int main(int argc,char *argv[])
 
   if (row == 1){ // LAPACK_ROW_MAJOR
     set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
-    //write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
+    write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
 
     info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, kl, ku, NRHS, AB, la, ipiv, RHS, NRHS);
-
+    	printf("LAPACK_ROW_MAJOR\n");
   }
   else { // LAPACK_COL_MAJOR
     set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
-    //write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
+    write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
 
     info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,la, kl, ku, NRHS, AB, lab, ipiv, RHS, la);
+        printf("LAPACK_COL_MAJOR\n");
   }
 
 
