@@ -1,14 +1,16 @@
 /**********************************************/
 /* lib_poisson1D.c                            */
-/* Numerical library developed to solve 1D    */ 
+/* Numerical library developed to solve 1D    */
 /* Poisson problem (Heat equation)            */
 /**********************************************/
 #include "lib_poisson1D.h"
 
+//Ecriture de la matrice de Poisson 1D en stockage general band en priorité ligne
 void set_GB_operator_rowMajor_poisson1D(double* AB, int *lab, int *la){
 
   //TODO
 }
+//Ecriture de la matrice de Poisson 1D en stockage general band en priorité colonne
 void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){
   int ii, jj, kk;
   for (jj=0;jj<(*la);jj++){
@@ -24,10 +26,10 @@ void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){
   }
   AB[0]=0.0;
   if (*kv == 1) {AB[1]=0;}
-  
+
   AB[(*lab)*(*la)-1]=0.0;
 }
-
+// Ecriture de la matrice identite en stockage general band en priorité colonne
 void set_GB_operator_colMajor_poisson1D_Id(double* AB, int *lab, int *la, int *kv){
   int ii, jj, kk;
   for (jj=0;jj<(*la);jj++){
@@ -44,7 +46,7 @@ void set_GB_operator_colMajor_poisson1D_Id(double* AB, int *lab, int *la, int *k
   AB[1]=0.0;
   AB[(*lab)*(*la)-1]=0.0;
 }
-
+//On initialise le systeme avec les conditions aux bord RHS = BC0 , .... ,BC1
 void set_dense_RHS_DBC_1D(double* RHS, int* la, double* BC0, double* BC1){
   int jj;
   RHS[0]= *BC0;
@@ -52,8 +54,8 @@ void set_dense_RHS_DBC_1D(double* RHS, int* la, double* BC0, double* BC1){
   for (jj=1;jj<(*la)-1;jj++){
     RHS[jj]=0.0;
   }
-}  
-
+}
+//On met en place la solution analytique
 void set_analytical_solution_DBC_1D(double* EX_SOL, double* X, int* la, double* BC0, double* BC1){
   int jj;
   double h, DELTA_T;
@@ -61,8 +63,8 @@ void set_analytical_solution_DBC_1D(double* EX_SOL, double* X, int* la, double* 
   for (jj=0;jj<(*la);jj++){
     EX_SOL[jj] = (*BC0) + X[jj]*DELTA_T;
   }
-}  
-
+}
+//On intialise le vecteur X = 0,1 , ... , la
 void set_grid_points_1D(double* x, int* la){
   int jj;
   double h;
@@ -71,7 +73,7 @@ void set_grid_points_1D(double* x, int* la){
     x[jj]=(jj+1)*h;
   }
 }
-
+//Ecriture de la matrice de l'operateur de Poisson en 1D en stockage general band priorité ligne
 void write_GB_operator_rowMajor_poisson1D(double* AB, int* lab, int* la, char* filename){
   FILE * file;
   int ii,jj;
@@ -90,11 +92,11 @@ void write_GB_operator_rowMajor_poisson1D(double* AB, int* lab, int* la, char* f
     perror(filename);
   }
 }
-
+//Ecriture de la matrice de l'operateur de Poisson en 1D en stockage general band priorité colonne
 void write_GB_operator_colMajor_poisson1D(double* AB, int* lab, int* la, char* filename){
   //TODO
 }
-
+// Ecriture de vecteur dans un fichier .dat
 void write_vec(double* vec, int* la, char* filename){
   int jj;
   FILE * file;
@@ -108,8 +110,8 @@ void write_vec(double* vec, int* la, char* filename){
   }
   else{
     perror(filename);
-  } 
-}  
+  }
+}
 
 void write_xy(double* vec, double* x, int* la, char* filename){
   int jj;
@@ -124,8 +126,8 @@ void write_xy(double* vec, double* x, int* la, char* filename){
   }
   else{
     perror(filename);
-  } 
-}  
+  }
+}
 
 void eig_poisson1D(double* eigval, int *la){
   int ii;
@@ -134,7 +136,7 @@ void eig_poisson1D(double* eigval, int *la){
     scal=(1.0*ii+1.0)*M_PI_2*(1.0/(*la+1));
     eigval[ii]=sin(scal);
     eigval[ii]=4*eigval[ii]*eigval[ii];
-  } 
+  }
 }
 
 double eigmax_poisson1D(int *la){
