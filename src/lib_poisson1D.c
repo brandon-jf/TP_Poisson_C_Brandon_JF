@@ -22,6 +22,22 @@ void set_GB_operator_rowMajor_poisson1D(double* AB, int *lab, int *la){
   AB[3*(*la)] = -1.0;
   AB[4*(*la)-1] = 0.0;
 }
+//Ecriture de la matrice d'identité en priorité ligne
+void set_GB_operator_rowMajor_poisson1D_Id(double* AB, int *lab, int *la){
+	int ii, jj, kk;
+
+	for(jj=1; jj<(*la);jj++){
+		AB[(*la)+jj] = 0.0;
+		AB[2*(*la)+jj]= 1.0;
+		AB[3*(*la)+jj] = 0.0;
+		AB[jj] = 0.0;
+	}
+		AB[2*(*la)] = 1.0;
+		AB[(*la)] = 0.0;
+	AB[3*(*la)] = 0.0;
+	AB[4*(*la)-1] = 0.0;
+  //TOD0
+}
 //Ecriture de la matrice de Poisson 1D en stockage general band en priorité colonne
 void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){
   int ii, jj, kk;
@@ -140,7 +156,7 @@ void write_xy(double* vec, double* x, int* la, char* filename){
     perror(filename);
   }
 }
-
+//Calcul des valeurs propre de la matrice de Poisson
 void eig_poisson1D(double* eigval, int *la){
   int ii;
   double scal;
@@ -150,14 +166,14 @@ void eig_poisson1D(double* eigval, int *la){
     eigval[ii]=4*eigval[ii]*eigval[ii];
   }
 }
-
+// Calcule de la valeur propres maximal
 double eigmax_poisson1D(int *la){
   double eigmax;
   eigmax=sin(*la *M_PI_2*(1.0/(*la+1)));
   eigmax=4*eigmax*eigmax;
   return eigmax;
 }
-
+//Calcul de la valeur propre minimal
 double eigmin_poisson1D(int *la){
   double eigmin;
   eigmin=sin(M_PI_2*(1.0/(*la+1)));

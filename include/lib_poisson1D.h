@@ -1,6 +1,6 @@
 /**********************************************/
 /* lib_poisson1D.h                            */
-/* Header for Numerical library developed to  */ 
+/* Header for Numerical library developed to  */
 /* solve 1D Poisson problem (Heat equation)   */
 /**********************************************/
 #include <stdio.h>
@@ -25,3 +25,4 @@ double eigmax_poisson1D(int *la);
 double eigmin_poisson1D(int *la);
 double richardson_alpha_opt(int *la);
 void richardson_alpha(double *AB, double *RHS, double *X, double *alpha_rich, int *lab, int *la,int *ku, int*kl, double *tol, int *maxit);
+void set_GB_operator_rowMajor_poisson1D_Id(double* AB, int *lab, int *la);
