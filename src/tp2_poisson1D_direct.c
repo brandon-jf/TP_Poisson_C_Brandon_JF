@@ -55,7 +55,59 @@ int main(int argc,char *argv[])
   ipiv = (int *) calloc(la, sizeof(int));
 
   int row = 0; //
+// test de dbgsv faux ku = -1
+  if (row == 1){ // LAPACK_ROW_MAJOR
+    set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
+    write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
+    // Resout le syteme d'equation A*X= B, ou B  = RHS
+    info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, kl, -1, NRHS, AB, la, ipiv, RHS, NRHS); // Si info = 0 , RHS => X
+    	printf("LAPACK_ROW_MAJOR\n");
+        printf(" INFO DGBSV = %d avec ku =-1\n ",info);
+  }
+  else { // LAPACK_COL_MAJOR
+    set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
+    write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
+    // Resout le systeme A*X=B ou B = RHS
+    info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,la, kl, -1, NRHS, AB, lab, ipiv, RHS, la);// Si info =0 alors RHS=>X
+        printf("LAPACK_COL_MAJOR\n");
+          printf(" INFO DGBSV = %d avec ku =-1\n ",info);
+  }
+  // test faux kl = -1
+  if (row == 1){ // LAPACK_ROW_MAJOR
+    set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
+    write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
+    // Resout le syteme d'equation A*X= B, ou B  = RHS
+    info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, -1, ku, NRHS, AB, la, ipiv, RHS, NRHS); // Si info = 0 , RHS => X
+      printf("LAPACK_ROW_MAJOR\n") ;
+        printf(" INFO DGBSV = %d avec kl =-1\n ",info);
+  }
+  else { // LAPACK_COL_MAJOR
+    set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
+    write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
+    // Resout le systeme A*X=B ou B = RHS
+    info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,-1, kl, ku, NRHS, AB, lab, ipiv, RHS, la);// Si info =0 alors RHS=>X
+        printf("LAPACK_COL_MAJOR\n");
+        printf(" INFO DGBSV = %d avec kl =-1\n ",info);
+  }
+  // test faux la = -1
+  if (row == 1){ // LAPACK_ROW_MAJOR
+    set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
+    write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
+    // Resout le syteme d'equation A*X= B, ou B  = RHS
+    info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,-1,kl, ku, NRHS, AB, la, ipiv, RHS, NRHS); // Si info = 0 , RHS => X
+      printf("LAPACK_ROW_MAJOR\n") ;
+        printf("\n INFO DGBSV = %d avec la  =-1\n ",info);
+  }
+  else { // LAPACK_COL_MAJOR
+    set_GB_operator_colMajor_poisson1D(AB, &lab, &la, &kv);
+    write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "AB_col.dat");
+    // Resout le systeme A*X=B ou B = RHS
+    info = LAPACKE_dgbsv(LAPACK_COL_MAJOR,-1, kl, ku, NRHS, AB, lab, ipiv, RHS, la);// Si info =0 alors RHS=>X
+        printf("LAPACK_COL_MAJOR\n");
+        printf("\n INFO DGBSV = %d avec la =-1\n ",info);
+  }
 
+  // Vrai resultat
   if (row == 1){ // LAPACK_ROW_MAJOR
     set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
     write_GB_operator_rowMajor_poisson1D(AB, &lab, &la, "AB_row.dat");
@@ -89,6 +141,7 @@ int main(int argc,char *argv[])
   if(row==1){
     set_dense_RHS_DBC_1D(RHS,&la,&T0,&T1); //On place le vecteur de température initial save
     set_analytical_solution_DBC_1D(EX_SOL, X, &la, &T0, &T1); // On calcul le vecteur representant la solution analytique
+    info = LAPACKE_dgbsv(LAPACK_ROW_MAJOR,la, kl, ku, NRHS, AB, la, ipiv, RHS, NRHS);
     temp = cblas_ddot(la, save, 1, save,1);
     temp = sqrt(temp);
   //  set_GB_operator_rowMajor_poisson1D(AB, &lab, &la);
